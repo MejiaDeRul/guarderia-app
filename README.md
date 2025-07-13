@@ -9,7 +9,7 @@ Plantilla base para aplicaciones FastAPI organizada con arquitectura **MVC (Mode
 
 ```
 app/
-├── main.py                # Punto de entrada de la aplicación (con lifespan)
+├── main.py                # Punto de entrada de la aplicación 
 ├── config.py              # Variables de configuración y entorno
 
 ├── models/                # Modelos ORM de SQLAlchemy
@@ -37,8 +37,8 @@ app/
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu_usuario/fastapi-mvc-boilerplate.git
-cd fastapi-mvc-boilerplate
+git clone https://github.com/MejiaDeRul/mvc-plantilla-fastapi.git
+cd mvc-plantilla-fastapi
 
 # Crear entorno virtual
 python -m venv .venv
@@ -53,7 +53,8 @@ pip install -r requirements.txt
 ## 🚀 Ejecución de la app
 
 ```bash
-uvicorn app.main:app --reload
+cd app
+fastapi dev main.py
 ```
 
 Abre en tu navegador: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
