@@ -53,7 +53,6 @@ docker compose logs -f api
 - Health: http://localhost:8000/health
 - Swagger: http://localhost:8000/docs
 
-Al primer arranque se crean las tablas (solo desarrollo). Para producción, usar Alembic.
 ---
 
 ## Flujo de prueba mínimo (en Swagger)
