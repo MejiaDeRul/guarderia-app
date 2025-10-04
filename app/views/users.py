@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.user import User, UserRole
@@ -58,3 +58,24 @@ def delete_user(user_id: int, db: Session = Depends(get_db), _=Depends(AdminOnly
     if not u:
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "deleted"}
+
+@router.get("/search", response_model=list[UserOut])
+def search_users(
+    name: str = Query(..., min_length=2),
+    role: UserRole | None = None,
+    db: Session = Depends(get_db),
+    current=Depends(AnyUser),
+):
+    q = db.query(User).filter(User.full_name.ilike(f"%{name}%"))
+
+    # Filtro por rol según quién consulta:
+    if current.role == UserRole.teacher:
+        q = q.filter(User.role == UserRole.parent)          # profe solo ve padres
+    elif current.role == UserRole.parent:
+        q = q.filter(User.role == UserRole.teacher)         # padre solo ve profes
+    else:
+        # admin puede ver cualquiera, o filtrar por 'role' si se pasa
+        if role:
+            q = q.filter(User.role == role)
+
+    return q.order_by(User.full_name.asc()).limit(10).all()
